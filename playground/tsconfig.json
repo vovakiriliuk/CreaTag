@@ -6,6 +6,11 @@
     "types": ["vite/client"],
     "skipLibCheck": true,
 
+    "paths": {
+      "@creatag/core": ["../packages/core/src/index.ts"],
+      "@creatag/render-dom": ["../packages/render-dom/src/index.ts"]
+    },
+
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,

@@ -387,6 +387,71 @@ var StyleBuilder = class _StyleBuilder {
   }
 };
 
+// src/constructor/themeBuilder.ts
+var ThemeBuilder = class {
+  _rules = {};
+  constructor() {
+    this._rules[":root"] = {};
+    this._rules["body"] = {};
+  }
+  setFont(family, size, weight, url) {
+    if (url) {
+      this._rules["@font-face"] = {
+        fontFamily: `"${family}"`,
+        src: `url("${url}")`
+      };
+    }
+    this._rules["body"] = {
+      ...this._rules["body"],
+      fontFamily: family,
+      ...size ? { fontSize: size } : {},
+      ...weight ? { fontWeight: weight } : {}
+    };
+    return this;
+  }
+  setColorScheme(primaryColor, secondaryColor, backgroundColor, textColor) {
+    this._rules[":root"] = {
+      ...this._rules[":root"],
+      "--color-primary": primaryColor,
+      "--color-secondary": secondaryColor,
+      "--color-bg": backgroundColor,
+      "--color-text": textColor
+    };
+    this._rules["body"] = {
+      ...this._rules["body"],
+      backgroundColor,
+      color: textColor
+    };
+    this._rules[".primary"] = { color: "var(--color-primary)" };
+    this._rules[".secondary"] = { color: "var(--color-secondary)" };
+    this._rules[".primary-bg"] = { backgroundColor: "var(--color-primary)" };
+    this._rules[".secondary-bg"] = { backgroundColor: "var(--color-secondary)" };
+    return this;
+  }
+  setSpacing(spacing) {
+    this._rules["body"] = {
+      ...this._rules["body"],
+      margin: spacing,
+      padding: spacing
+    };
+    return this;
+  }
+  setRule(selector, styles) {
+    this._rules[selector] = {
+      ...this._rules[selector] || {},
+      ...styles
+    };
+    return this;
+  }
+  build() {
+    return this._rules;
+  }
+  inject() {
+    StyleBuilder.inject(this._rules);
+  }
+};
+var themeBuilder = ThemeBuilder;
+
 // src/routing/define-routes.ts
 var defineRoutes = class {
   routes = {};
@@ -906,6 +971,7 @@ export {
   StyleBuilder,
   Text,
   TextLightStyle,
+  ThemeBuilder,
   Ul,
   afterEachGuard,
   creaWindowSize,
@@ -916,5 +982,6 @@ export {
   createStore,
   defineRoutes,
   effect,
-  signal
+  signal,
+  themeBuilder
 };

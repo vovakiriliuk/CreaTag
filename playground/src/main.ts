@@ -1,44 +1,33 @@
 import { currentPageContent } from './routing';
 import './style.css';
-import { createApp, Text, Builder, Definer, Navbar } from '@creatag/core';
+import { createApp, Text, Builder, ButtonComponent } from '@creatag/core';
+import { themeBuilder } from '@creatag/core'
+import { Footer } from './components/Footer';
+import { Header } from './components/Header';
 
 const app = createApp();
 
-const d = new Definer();
-
-const Footer = d.define('footer', {
-  textAlign: 'center',
-  padding: '2rem',
-  background: '#1a1a1a',
-  borderTop: '1px solid #333',
-  marginTop: '4rem',
-});
-
-const header = new Builder([
-  Navbar({
-    brand: { text: 'CreaTag', href: '/' },
-    links: [
-      { text: 'Home', href: '/' },
-      { text: 'Features', href: '/features' },
-      { text: 'Pricing', href: '/pricing' },
-      { text: 'About', href: '/about' },
-    ],
-  }),
-]);
+new themeBuilder()
+    .setFont('Arial','16px','400')
+    .setColorScheme('#000','#6382ab','#c7d2dd','green')
+    .inject()
 
 const main = new Builder([
   {
-    tag: 'div',
+    tag: 'main',
     class: 'page-wrapper',
     children: () => [currentPageContent.value],
   },
 ]);
 
 const footer = new Builder([
-  Footer([Text({ text: 'CreaTag is a simple reactive UI library built with TypeScript.' })]),
+  Footer([
+    Text({ text: 'CreaTag is a simple reactive UI library built with TypeScript.' }),
+    new ButtonComponent('Click on me').getElement(),
+  ]),
 ]);
 
-app.add(header);
+app.add(Header);
 app.add(main);
 app.add(footer);
 app.mount('#app');

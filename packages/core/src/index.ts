@@ -7,6 +7,7 @@ export * from './constructor/builder';
 export * from './constructor/definer';
 export * from './constructor/signal';
 export * from './constructor/styleBuilder';
+export * from './constructor/themeBuilder';
 
 // routing
 export * from './routing/define-routes';

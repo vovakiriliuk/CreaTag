@@ -47,6 +47,7 @@ __export(index_exports, {
   StyleBuilder: () => StyleBuilder,
   Text: () => Text,
   TextLightStyle: () => TextLightStyle,
+  ThemeBuilder: () => ThemeBuilder,
   Ul: () => Ul,
   afterEachGuard: () => afterEachGuard,
   creaWindowSize: () => creaWindowSize,
@@ -57,7 +58,8 @@ __export(index_exports, {
   createStore: () => createStore,
   defineRoutes: () => defineRoutes,
   effect: () => effect,
-  signal: () => signal
+  signal: () => signal,
+  themeBuilder: () => themeBuilder
 });
 module.exports = __toCommonJS(index_exports);
 
@@ -449,6 +451,71 @@ var StyleBuilder = class _StyleBuilder {
     }
   }
 };
+
+// src/constructor/themeBuilder.ts
+var ThemeBuilder = class {
+  _rules = {};
+  constructor() {
+    this._rules[":root"] = {};
+    this._rules["body"] = {};
+  }
+  setFont(family, size, weight, url) {
+    if (url) {
+      this._rules["@font-face"] = {
+        fontFamily: `"${family}"`,
+        src: `url("${url}")`
+      };
+    }
+    this._rules["body"] = {
+      ...this._rules["body"],
+      fontFamily: family,
+      ...size ? { fontSize: size } : {},
+      ...weight ? { fontWeight: weight } : {}
+    };
+    return this;
+  }
+  setColorScheme(primaryColor, secondaryColor, backgroundColor, textColor) {
+    this._rules[":root"] = {
+      ...this._rules[":root"],
+      "--color-primary": primaryColor,
+      "--color-secondary": secondaryColor,
+      "--color-bg": backgroundColor,
+      "--color-text": textColor
+    };
+    this._rules["body"] = {
+      ...this._rules["body"],
+      backgroundColor,
+      color: textColor
+    };
+    this._rules[".primary"] = { color: "var(--color-primary)" };
+    this._rules[".secondary"] = { color: "var(--color-secondary)" };
+    this._rules[".primary-bg"] = { backgroundColor: "var(--color-primary)" };
+    this._rules[".secondary-bg"] = { backgroundColor: "var(--color-secondary)" };
+    return this;
+  }
+  setSpacing(spacing) {
+    this._rules["body"] = {
+      ...this._rules["body"],
+      margin: spacing,
+      padding: spacing
+    };
+    return this;
+  }
+  setRule(selector, styles) {
+    this._rules[selector] = {
+      ...this._rules[selector] || {},
+      ...styles
+    };
+    return this;
+  }
+  build() {
+    return this._rules;
+  }
+  inject() {
+    StyleBuilder.inject(this._rules);
+  }
+};
+var themeBuilder = ThemeBuilder;
 
 // src/routing/define-routes.ts
 var defineRoutes = class {
@@ -970,6 +1037,7 @@ function createMiddleware() {
   StyleBuilder,
   Text,
   TextLightStyle,
+  ThemeBuilder,
   Ul,
   afterEachGuard,
   creaWindowSize,
@@ -980,5 +1048,6 @@ function createMiddleware() {
   createStore,
   defineRoutes,
   effect,
-  signal
+  signal,
+  themeBuilder
 });

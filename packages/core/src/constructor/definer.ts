@@ -9,11 +9,11 @@ export type TagFactory = ((
 };
 
 export class Definer {
-  define(tagName: string, styles: StyleObject): TagFactory {
+  define(tagName: string, styles?: StyleObject): TagFactory {
     const id = Math.random().toString(36).slice(2, 7);
     const className = `ct-${tagName}-${id}`;
 
-    injectStyles(className, styles);
+    if(styles) injectStyles(className, styles);
 
     const factory = ((
       propsOrTextOrChildren?: (Partial<Tag> & TagProps) | string | Tag[],

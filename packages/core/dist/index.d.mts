@@ -96,6 +96,24 @@ interface StyleBuilder {
     toString(): string;
 }
 
+interface FontOptions {
+    family: string;
+    size?: string;
+    weight?: string;
+    url?: string;
+}
+declare class ThemeBuilder {
+    private _rules;
+    constructor();
+    setFont(family: string, size?: string, weight?: string, url?: string): this;
+    setColorScheme(primaryColor: string, secondaryColor: string, backgroundColor: string, textColor: string): this;
+    setSpacing(spacing: string): this;
+    setRule(selector: string, styles: StyleObject): this;
+    build(): Record<string, StyleObject>;
+    inject(): void;
+}
+declare const themeBuilder: typeof ThemeBuilder;
+
 declare class defineRoutes {
     private routes;
     addRoute(path: string, handler: (page?: any) => void, page?: any): void;
@@ -324,4 +342,4 @@ declare const creaWindowSize: () => {
     width: Signal<number>;
 };
 
-export { App, BeforeEachGuard, Builder, BurgerLightStyle, ButtonComponent, ButtonLightStyle, Definer, HeadersLightStyle, Hn, InputComponent, InputLightStyle, Li, LinkLightStyle, Middleware, MobileMenuStyle, NavLinksStyle, Navbar, NavbarLightStyle, PageBuilder, type PageData, Persist, type Reactive, Reducer, Selectors, Signal, Store, StyleBuilder, type StyleObject, type Tag, type TagFactory, type TagProps, Text, TextLightStyle, Ul, afterEachGuard, creaWindowSize, createApp, createMiddleware, createPersist, createReducer, createStore, defineRoutes, effect, signal };
+export { App, BeforeEachGuard, Builder, BurgerLightStyle, ButtonComponent, ButtonLightStyle, Definer, type FontOptions, HeadersLightStyle, Hn, InputComponent, InputLightStyle, Li, LinkLightStyle, Middleware, MobileMenuStyle, NavLinksStyle, Navbar, NavbarLightStyle, PageBuilder, type PageData, Persist, type Reactive, Reducer, Selectors, Signal, Store, StyleBuilder, type StyleObject, type Tag, type TagFactory, type TagProps, Text, TextLightStyle, ThemeBuilder, Ul, afterEachGuard, creaWindowSize, createApp, createMiddleware, createPersist, createReducer, createStore, defineRoutes, effect, signal, themeBuilder };
